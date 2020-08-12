@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.FloatType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +176,36 @@ public class AdminDAOImpl implements AdminDAO {
 		
 		return totalCust;
 		
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<GymFinanceDetails> getRatingsAndFeedback() {
+		Session currentSession = sessionFactory.getCurrentSession();		
+		
+		Query theQuery = currentSession.createSQLQuery("Select c.username, g.class_nm, g.class_typ, cg.rating, cg.feedback from Cust_GymClass cg join Customer c on cg.id=c.id join GymClass g "
+				+ "on cg.class_id=g.class_id where rating is not null && "
+				+ "feedback is not null").addScalar("username", new StringType())
+				.addScalar("class_nm", new StringType()).addScalar("class_typ", new StringType()).addScalar("rating", new FloatType()).addScalar("feedback", new StringType());
+		
+		theQuery.setResultTransformer(Transformers.aliasToBean(GymFinanceDetails.class));
+		
+		List<GymFinanceDetails> result = theQuery.list();
+		List<GymFinanceDetails> feedbackList= new ArrayList<>();
+		for(int i=0; i<result.size(); i++) {
+			GymFinanceDetails fobj = new GymFinanceDetails();
+			GymFinanceDetails fobjtemp = result.get(i);
+			fobj.setUsername(fobjtemp.getUsername());
+			fobj.setClass_nm(fobjtemp.getClass_nm());
+			fobj.setClass_typ(fobjtemp.getClass_typ());
+			fobj.setRating(fobjtemp.getRating());
+			fobj.setFeedback(fobjtemp.getFeedback());
+			feedbackList.add(fobj);
+		}
+		
+		
+		return feedbackList;
 	}
 	
 	

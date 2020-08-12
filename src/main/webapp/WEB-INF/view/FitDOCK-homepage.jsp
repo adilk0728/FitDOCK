@@ -40,5 +40,22 @@
 </nav>
 
 
+		<c:forEach var="tempfeedback" items="${feedback}">
+
+
+			<tr>
+
+				<td>${tempfeedback.username}</td>
+				<td>${tempfeedback.class_nm}</td>
+				<td>${tempfeedback.class_typ}</td>
+				<td>${tempfeedback.rating}</td>
+				<td>${tempfeedback.feedback}</td>
+
+			</tr>
+
+
+		</c:forEach>
+
+
 </body>
 </html>

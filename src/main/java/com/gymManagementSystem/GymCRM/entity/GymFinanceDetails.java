@@ -11,6 +11,54 @@ public class GymFinanceDetails {
 	
 	private Integer count;
 
+	private String class_typ;
+	
+	private String username;
+	
+	private Float rating;
+	
+	private String feedback;
+	
+	
+	public String getClass_typ() {
+		return class_typ;
+	}
+
+
+	public void setClass_typ(String class_typ) {
+		this.class_typ = class_typ;
+	}
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+	public Float getRating() {
+		return rating;
+	}
+
+
+	public void setRating(Float rating) {
+		this.rating = rating;
+	}
+
+
+	public String getFeedback() {
+		return feedback;
+	}
+
+
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+
 
 	public Integer getCount() {
 		return count;

@@ -182,7 +182,7 @@ public class CustomerController {
 		System.out.println(var1new);
 		System.out.println(var2new);
 		System.out.println(var3new);
-		float res = (var1new + var2new + var3new + var4new + var5new) / 5;
+		float res = (float) ((var1new + var2new + var3new + var4new + var5new) / 5.0);
 		System.out.println(res);
 		comment = gymClass.getComment();
 		System.out.println(comment);

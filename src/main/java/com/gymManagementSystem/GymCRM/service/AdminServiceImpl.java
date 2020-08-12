@@ -67,4 +67,11 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.getTotalOther();
 	}
 
+	@Override
+	@Transactional
+	public List<GymFinanceDetails> getRatingsAndFeedback() {
+		
+		return adminDAO.getRatingsAndFeedback();
+	}
+
 }

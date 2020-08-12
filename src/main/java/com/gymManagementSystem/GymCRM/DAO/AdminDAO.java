@@ -23,4 +23,6 @@ public interface AdminDAO {
 
 	public Integer getTotalOther();
 
+	public List<GymFinanceDetails> getRatingsAndFeedback();
+
 }

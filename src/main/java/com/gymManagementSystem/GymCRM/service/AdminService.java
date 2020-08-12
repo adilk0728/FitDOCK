@@ -23,4 +23,6 @@ public interface AdminService {
 
 	public Integer getTotalOther();
 
+	public List<GymFinanceDetails> getRatingsAndFeedback();
+
 }
