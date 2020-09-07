@@ -10,6 +10,86 @@ public class GymFinanceDetails {
 	private Integer cost;
 	
 	private Integer count;
+	
+	private String em_firstname;
+	
+	public String getEm_firstname() {
+		return em_firstname;
+	}
+	
+	private int var1;
+	
+	private int var2;
+	private int var3;
+	private int var4;
+	private int var5;
+	
+	private String comment;
+	
+
+	public String getComment() {
+		return comment;
+	}
+
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+
+	public int getVar1() {
+		return var1;
+	}
+
+
+	public void setVar1(int var1) {
+		this.var1 = var1;
+	}
+
+
+	public int getVar2() {
+		return var2;
+	}
+
+
+	public void setVar2(int var2) {
+		this.var2 = var2;
+	}
+
+
+	public int getVar3() {
+		return var3;
+	}
+
+
+	public void setVar3(int var3) {
+		this.var3 = var3;
+	}
+
+
+	public int getVar4() {
+		return var4;
+	}
+
+
+	public void setVar4(int var4) {
+		this.var4 = var4;
+	}
+
+
+	public int getVar5() {
+		return var5;
+	}
+
+
+	public void setVar5(int var5) {
+		this.var5 = var5;
+	}
+
+
+	public void setEm_firstname(String em_firstname) {
+		this.em_firstname = em_firstname;
+	}
 
 	private String class_typ;
 	

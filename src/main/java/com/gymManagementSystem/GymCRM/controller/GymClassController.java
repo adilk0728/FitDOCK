@@ -55,7 +55,7 @@ public class GymClassController {
 		
 		theModel.addAttribute("GymClass", theGymClass);
 
-		return "gymclasses-form";
+		return "Admin/gymclasses-form";
 	}
 	
 	@PostMapping("/saveGymClass")
@@ -66,7 +66,7 @@ public class GymClassController {
 //		System.out.println("\n\n\n\n\n");
 		
 		if(theBR.hasErrors()){
-			return "gymclasses-form";
+			return "Admin/gymclasses-form";
 		}
 		else {
 
@@ -87,7 +87,7 @@ public class GymClassController {
 		
 		theModel.addAttribute("GymClass", theGymClass);
 
-		return "gymclasses-form";
+		return "Admin/gymclasses-form";
 
 	}
 

@@ -15,10 +15,10 @@ public class LoginController {
 	
 	// add request mapping for /access-denied
 	
-	@GetMapping("/access-denied")
+	@GetMapping("/error")
 	public String showAccessDenied() {
 		
-		return "access-denied";
+		return "Exceptions/access-denied";
 		
 	}
 	

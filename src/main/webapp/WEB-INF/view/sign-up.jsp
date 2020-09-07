@@ -93,14 +93,14 @@
 						<td><form:input path="age" /></td>
 					</tr>
 					<tr>
-						<td><label> Weight</label><br>
+						<td><label> Weight(Kgs)</label><br>
 						<form:errors path="weight"/></td>
 					</tr>
 					<tr>
 						<td><form:input path="weight" /></td>
 					</tr>
 					<tr>
-						<td><label> Height(in Cms)</label><br>
+						<td><label> Height(Cms)</label><br>
 						<form:errors path="height"/></td>
 					</tr>
 					<tr>

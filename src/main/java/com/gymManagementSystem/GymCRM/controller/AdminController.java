@@ -2,7 +2,10 @@ package com.gymManagementSystem.GymCRM.controller;
 
 import java.util.List;
 
+import javax.xml.ws.http.HTTPException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,7 +39,7 @@ public class AdminController {
 		// add the customers to the model
 		theModel.addAttribute("customers", theCustomers);
 		
-		return "list-customers";
+		return "Admin/list-customers";
 	}
 	
 	@GetMapping("/delete")
@@ -69,7 +72,7 @@ public class AdminController {
 		theModel.addAttribute("totalOther", totalOther);
 		theModel.addAttribute("gymFin", gymFin);
 		
-		return "finance-home";
+		return "Admin/finance-home";
 	}
 	
 //	@ExceptionHandler(value = Exception.class)
@@ -77,6 +80,14 @@ public class AdminController {
 //		
 //		return "exception-page";
 //	}
+	
+	@ExceptionHandler(value = HTTPException.class)
+	public String httphandleExceptions(Exception e) {
+		
+		return "Exceptions/access-denied";
+	}
+	
+
 	
 }
 

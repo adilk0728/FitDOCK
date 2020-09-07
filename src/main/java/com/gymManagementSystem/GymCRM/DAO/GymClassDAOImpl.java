@@ -1,14 +1,19 @@
 package com.gymManagementSystem.GymCRM.DAO;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.gymManagementSystem.GymCRM.entity.GymClass;
+import com.gymManagementSystem.GymCRM.entity.GymFinanceDetails;
 
 @Repository
 public class GymClassDAOImpl implements GymClassDAO {
@@ -89,7 +94,7 @@ public class GymClassDAOImpl implements GymClassDAO {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void saveFeedback(String currentUser, float res, String comment) {
+	public void saveFeedback(String currentUser, float res, String comment, int class_id) {
 		
 		Session currentSession = sessionFactory.getCurrentSession();
 		
@@ -100,10 +105,58 @@ public class GymClassDAOImpl implements GymClassDAO {
 		int cust_id = (int) theQuery.uniqueResult();
 		//Query theNewQuery = currentSession.createQuery("insert into Cust_GymClass (id, class_id) values (:customerID,:gymClassID)");
 //		UPDATE Cust_GymClass SET rating = :result, feedback = :feedback WHERE id = :customerID
-		Query theNewQuery = currentSession.createSQLQuery("UPDATE Cust_GymClass SET rating = :result, feedback = :feedback WHERE id = :customerID");
+		Query theNewQuery = currentSession.createSQLQuery("UPDATE Cust_GymClass SET rating = :result, feedback = :feedback WHERE id = :customerID && class_id = :class_id");
 //		insert into Cust_GymClass (rating, feedback) values (:result,:feedback) where id=:customerID
+		theNewQuery.setParameter("class_id",class_id);
 		theNewQuery.setParameter("result",res);
 		theNewQuery.setParameter("feedback",comment);
+		theNewQuery.setParameter("customerID",cust_id);
+		theNewQuery.executeUpdate();
+		
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<GymFinanceDetails> getTrainerFeedback(String currentUser) {
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		Query<GymFinanceDetails> theQuery = currentSession.createSQLQuery("SELECT e.em_firstname, g.class_nm, g.class_typ, g.class_id FROM Employee e join GymClass g on g.em_id=e.em_id join Cust_GymClass cg on g.class_id=cg.class_id "
+				+ "join Customer c on cg.id=c.id where cg.em_rating is NULL && c.username=:currentUser").addScalar("em_firstname", new StringType()).addScalar("class_nm", new StringType())
+		.addScalar("class_typ", new StringType()).addScalar("class_id", new IntegerType());
+		theQuery.setString("currentUser", currentUser);
+		theQuery.setResultTransformer(Transformers.aliasToBean(GymFinanceDetails.class));
+
+		List<GymFinanceDetails> result = theQuery.list();
+		List<GymFinanceDetails> feedbackTrainerList= new ArrayList<>();
+		for(int i=0; i<result.size(); i++) {
+			GymFinanceDetails fobj = new GymFinanceDetails();
+			GymFinanceDetails fobjtemp = result.get(i);
+			fobj.setEm_firstname(fobjtemp.getEm_firstname());
+			fobj.setClass_id(fobjtemp.getClass_id());
+			fobj.setClass_nm(fobjtemp.getClass_nm());
+			fobj.setClass_typ(fobjtemp.getClass_typ());
+			feedbackTrainerList.add(fobj);
+		}
+		
+		return feedbackTrainerList;
+	}
+
+	@Override
+	public void savetrainerfeedback(float res, int class_id, String currentUser) {
+Session currentSession = sessionFactory.getCurrentSession();
+		
+		Query theQuery = currentSession.createSQLQuery("Select Customer.id from Customer inner join users on Customer.username=users.username "
+				+ "where Customer.username=:theName");
+		//theQuery.setParameter("theName", name);
+		theQuery.setString("theName", currentUser);
+		int cust_id = (int) theQuery.uniqueResult();
+		//Query theNewQuery = currentSession.createQuery("insert into Cust_GymClass (id, class_id) values (:customerID,:gymClassID)");
+//		UPDATE Cust_GymClass SET rating = :result, feedback = :feedback WHERE id = :customerID
+		Query theNewQuery = currentSession.createSQLQuery("UPDATE Cust_GymClass SET em_rating = :res WHERE id = :customerID && class_id = :class_id");
+//		insert into Cust_GymClass (rating, feedback) values (:result,:feedback) where id=:customerID
+		theNewQuery.setParameter("class_id",class_id);
+		theNewQuery.setParameter("res",res);
 		theNewQuery.setParameter("customerID",cust_id);
 		theNewQuery.executeUpdate();
 		

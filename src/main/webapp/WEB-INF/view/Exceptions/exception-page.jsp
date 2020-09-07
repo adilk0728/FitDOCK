@@ -6,11 +6,11 @@
 <html>
 
 <head>
-<title>Welcome Home</title>
+<title>FitDOCK - Oops</title>
 </head>
 
 <body>
-	<h2>Gym CRM Index page</h2>
+	
 	<hr>
 
 	Welcome to the Exception Page

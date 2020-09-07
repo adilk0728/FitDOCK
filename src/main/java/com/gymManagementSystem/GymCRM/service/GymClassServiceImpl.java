@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gymManagementSystem.GymCRM.DAO.GymClassDAO;
 import com.gymManagementSystem.GymCRM.entity.GymClass;
+import com.gymManagementSystem.GymCRM.entity.GymFinanceDetails;
 
 @Service
 public class GymClassServiceImpl implements GymClassService {
@@ -57,9 +58,22 @@ public class GymClassServiceImpl implements GymClassService {
 
 	@Override
 	@Transactional
-	public void saveFeedback(String currentUser, float res, String comment) {
+	public void saveFeedback(String currentUser, float res, String comment, int class_id) {
 		
-		gymClassDAO.saveFeedback(currentUser, res, comment);
+		gymClassDAO.saveFeedback(currentUser, res, comment, class_id);
+	}
+
+	@Override
+	@Transactional
+	public List<GymFinanceDetails> getTrainerFeedback(String currentUser) {
+		return gymClassDAO.getTrainerFeedback(currentUser);
+	}
+
+	@Override
+	@Transactional
+	public void savetrainerfeedback(float res, int class_id, String currentUser) {
+		gymClassDAO.savetrainerfeedback(res, class_id, currentUser);
+		
 	}
 
 

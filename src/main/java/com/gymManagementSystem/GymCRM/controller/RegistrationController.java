@@ -51,7 +51,7 @@ public class RegistrationController {
 		
 		theModel.addAttribute("crmUser", new CrmUser());
 		
-		return "registration-form";
+		return "sign-up-new";
 		
 	}
 
@@ -73,7 +73,7 @@ public class RegistrationController {
 
 			logger.warning("User name/password can not be empty.");
 			
-			return "registration-form";	
+			return "sign-up-new";	
 		}
 		
 		// check the database if user already exists
@@ -85,7 +85,7 @@ public class RegistrationController {
 
 			logger.warning("User name already exists.");
 			
-			return "registration-form";			
+			return "sign-up-new";			
 		}
 		
 		//

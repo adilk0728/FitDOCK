@@ -16,12 +16,14 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
+@EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan(value="com.gymManagementSystem.GymCRM")
 @PropertySource("classpath:persistence-mysql.properties")
@@ -55,16 +57,6 @@ public class HibernateConfig implements WebMvcConfigurer {
 
 		return datasource;
 	}
-
-	private int getIntProperty(String propName) {
-
-		String propVal = env.getProperty(propName);
-
-		// now convert to int
-		int intPropVal = Integer.parseInt(propVal);
-
-		return intPropVal;
-	}
 	
 	@Bean
 	public LocalSessionFactoryBean getSessionFactory() {
@@ -91,8 +83,17 @@ public class HibernateConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	 registry
-	 .addResourceHandler("/resources/**")
-	 .addResourceLocations("/resources/");
+	 .addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
+	
+	private int getIntProperty(String propName) {
+
+		String propVal = env.getProperty(propName);
+
+		// now convert to int
+		int intPropVal = Integer.parseInt(propVal);
+
+		return intPropVal;
 	}
 //	@Bean
 //    public PlatformTransactionManager txManager() {

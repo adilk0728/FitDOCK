@@ -12,11 +12,12 @@ import com.gymManagementSystem.GymCRM.entity.Customer;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-
+	//Obtaining the required DAO and injecting
 	@Autowired
 	private CustomerDAO customerDAO;
 	
 	
+	//Use the injected DAO in the required method
 	@Override
 	@Transactional
 	public List<Customer> getCustomers() {

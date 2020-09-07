@@ -21,11 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		UserBuilder users = User.withDefaultPasswordEncoder();
-//		
-//		auth.inMemoryAuthentication().withUser(users.username("Adi").password("pass").roles("ADMIN"))
-//									.withUser(users.username("Debs").password("pass1").roles("EMPLOYEE"))
-//									.withUser(users.username("Mojo").password("pass12").roles("CUSTOMER"));
+
 		
 		auth.jdbcAuthentication().dataSource(datasource);
 	}
@@ -44,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.defaultSuccessUrl("/home")
 		.loginProcessingUrl("/authenticateTheUser")
 		.permitAll()
-		.and().logout().logoutSuccessUrl("/login").permitAll();
+		.and().logout().logoutSuccessUrl("/").permitAll().and()
+		.exceptionHandling().accessDeniedPage("/error");
 	}
 	
 	
@@ -58,8 +55,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return jdbcUserDetailsManager; 
 	}
 	
-	
-	
-
 	
 }

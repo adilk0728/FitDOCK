@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import javax.xml.ws.http.HTTPException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.gymManagementSystem.GymCRM.entity.Customer;
 import com.gymManagementSystem.GymCRM.entity.GymClass;
+import com.gymManagementSystem.GymCRM.entity.GymFinanceDetails;
 import com.gymManagementSystem.GymCRM.service.CustomerService;
 import com.gymManagementSystem.GymCRM.service.GymClassService;
 
@@ -53,7 +56,7 @@ public class CustomerController {
 
 		// add customers to the model
 
-		return "customer-gymclass-enroll";
+		return "Customer/customer-gymclass-enroll";
 	}
 
 	@GetMapping("enroll")
@@ -61,7 +64,7 @@ public class CustomerController {
 
 		customerService.enrollGymClass(theId, name);
 
-		return "payment";
+		return "Payment/payment";
 	}
 
 	@GetMapping("showFormForAdd")
@@ -71,14 +74,14 @@ public class CustomerController {
 
 		theModel.addAttribute("customer", theCustomer);
 
-		return "sign-up";
+		return "cust-details-fill";
 	}
 
 	@PostMapping("/saveCustomer")
 	public String saveCustomer(@Valid @ModelAttribute("customer") Customer theCustomer, BindingResult theBR) {
 
 		if (theBR.hasErrors()) {
-			return "sign-up";
+			return "cust-details-fill";
 		} else {
 
 			customerService.saveCustomer(theCustomer);
@@ -95,7 +98,7 @@ public class CustomerController {
 
 		theModel.addAttribute("customer", theCustomer);
 
-		return "customer-form";
+		return "Customer/edit-cust-details";
 
 	}
 
@@ -106,16 +109,16 @@ public class CustomerController {
 
 		theModel.addAttribute("customer", theCustomer);
 
-		return "customer-details";
+		return "Customer/customer-details";
 
 	}
 
-	@GetMapping("/home")
-	public String home() {
-
-		return "customer-home";
-
-	}
+//	@GetMapping("/home")
+//	public String home() {
+//
+//		return "customer-home";
+//
+//	}
 
 	@GetMapping("/enrollgymlist")
 	public String listGymClassEnrolle(Model theModel) {
@@ -126,7 +129,7 @@ public class CustomerController {
 
 		// add customers to the model
 
-		return "customer-class-enroll";
+		return "Customer/customer-class-enroll";
 	}
 
 //	@GetMapping("/delete")
@@ -143,7 +146,16 @@ public class CustomerController {
 		String currentUser = principal.getName();
 
 		List<GymClass> Feedback = gymClassService.getFeedback(currentUser);
-
+		String state = null;
+		String noResults = null;
+		if(Feedback.isEmpty()) {
+			 noResults  = "The List is empty, you have to enroll to classes";
+			 state = "Not Null";
+		}
+		System.out.println(state);
+		System.out.println(noResults);
+		theModel.addAttribute("noResults", noResults);
+		theModel.addAttribute("state", state);
 		theModel.addAttribute("Feedback", Feedback);
 
 		return "Customer/feedback";
@@ -157,7 +169,7 @@ public class CustomerController {
 		theModel.addAttribute("class_id", class_id);
 		theModel.addAttribute("theGymClass", theGymClass);
 
-		return "Customer/feedbackform";
+		return "Customer/classfed";
 	}
 
 	@GetMapping("feedbackDone")
@@ -165,15 +177,7 @@ public class CustomerController {
 			@RequestParam("var1") String var1, @RequestParam("var2") String var2, @RequestParam("var3") String var3,
 			@RequestParam("var4") String var4, @RequestParam("var5") String var5, @RequestParam("comment") String comment, @ModelAttribute("theGymClass") GymClass gymClass) {
 
-		String currentUser = principal.getName();
-
-
-//		int var1new = Integer.parseInt(theGymClass.getVar1());
-//		int var2new = Integer.parseInt(theGymClass.getVar2());
-//		int var3new = Integer.parseInt(theGymClass.getVar3());
-//		int var4new = Integer.parseInt(theGymClass.getVar4());
-//		int var5new = Integer.parseInt(theGymClass.getVar5());
-		
+		String currentUser = principal.getName();		
 		int var1new = gymClass.getVar1();
 		int var2new =  gymClass.getVar2();
 		int var3new =  gymClass.getVar3();
@@ -186,15 +190,64 @@ public class CustomerController {
 		System.out.println(res);
 		comment = gymClass.getComment();
 		System.out.println(comment);
-		gymClassService.saveFeedback(currentUser, res, comment);
+		gymClassService.saveFeedback(currentUser, res, comment, class_id);
 
 		return "home";
 	}
 
+	
+	@GetMapping("trainerfeedback")
+	public String trainerFeedback(Model theModel, Principal principal) {
+
+		String currentUser = principal.getName();
+
+		List<GymFinanceDetails> trainerFeedback = gymClassService.getTrainerFeedback(currentUser);
+		theModel.addAttribute("trainerFeedback", trainerFeedback);
+
+		return "Customer/trainer-feedback";
+	}
+
+	@GetMapping("trainerfeedbackshow")
+	public String trainerFeedbackshowform(@RequestParam("class_id") int class_id, Model theModel) {
+
+		GymFinanceDetails trainerfb = new GymFinanceDetails();
+
+		theModel.addAttribute("class_id", class_id);
+		theModel.addAttribute("trainerfb", trainerfb);
+
+		return "Customer/trainfed";
+	}
+	@GetMapping("trainerfeedbackDone")
+	public String trainerfeedbackshowformDone(@RequestParam("class_id") int class_id, Model theModel, Principal principal,
+			@RequestParam("var1") String var1, @RequestParam("var2") String var2, @RequestParam("var3") String var3,
+			@RequestParam("var4") String var4, @RequestParam("var5") String var5, @ModelAttribute("GymFinanceDetails") GymFinanceDetails trainerfb) {
+
+		String currentUser = principal.getName();
+
+		
+		int var1new = trainerfb.getVar1();
+		int var2new =  trainerfb.getVar2();
+		int var3new =  trainerfb.getVar3();
+		int var4new =  trainerfb.getVar4();
+		int var5new =  trainerfb.getVar5();
+
+		float res = (float) ((var1new + var2new + var3new + var4new + var5new) / 5.0);
+
+
+		gymClassService.savetrainerfeedback(res, class_id, currentUser);
+		return "home";
+	}
+	
 	@ExceptionHandler(value = PersistenceException.class)
 	public String handleExceptions(Exception e) {
 
-		return "Exceptions/exception-page";
+		return "Exceptions/enrollment-error";
+	}
+	
+	@ExceptionHandler(value = HTTPException.class)
+	public String httphandleExceptions(Exception e) {
+		
+		return "Exceptions/access-denied";
 	}
 
 }

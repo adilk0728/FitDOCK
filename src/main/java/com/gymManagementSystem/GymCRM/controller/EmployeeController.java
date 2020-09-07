@@ -45,7 +45,7 @@ public class EmployeeController {
 
 		// add customers to the model
 
-		return "list-employees";
+		return "Admin/list-employees";
 	}
 	
 	@GetMapping("showFormForEmployee")
@@ -55,14 +55,14 @@ public class EmployeeController {
 
 		theModel.addAttribute("employee", theEmployee);
 
-		return "employee-form";
+		return "Admin/employee-form";
 	}
 	
 	@PostMapping("saveEmployee")
 	public String saveCustomer(@Valid @ModelAttribute("employee") Employee theEmployee, BindingResult theBR) {
 
 		if(theBR.hasErrors()) {
-			return "employee-form";
+			return "Admin/employee-form";
 		}
 		else {
 		employeeService.saveEmployee(theEmployee);
@@ -81,7 +81,7 @@ public class EmployeeController {
 		
 		theModel.addAttribute("employee", theEmployee);
 
-		return "employee-form";
+		return "Admin/employee-form";
 
 	}
 
